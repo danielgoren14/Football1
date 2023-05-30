@@ -6,17 +6,18 @@ public class Team {
     private  int id;
     private  String name;
     private  List<Player> playerList;
-    private List<Goal> goalList;
+//    private int points;
+    //private List<Goal> goalList;
 
     public Team(String line) {
         String[] temp =line.split(",");
         this.id = Integer.parseInt(temp[0]);
         this.name = temp[1];
         this.playerList=LeagueManager.createPlayerList();
-        this.playerList
+        /*this.playerList
                 .stream()
                 .forEach(player -> player.setPlayerTeam(this));
-
+        */
     }
 
     public boolean sameID(int id){

@@ -26,4 +26,13 @@ public class Goal {
     public Player getScorer() {
         return scorer;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Goal{");
+        sb.append("id=").append(id);
+        sb.append(", scorer=").append(scorer);
+        sb.append('}');
+        return sb.toString();
+    }
 }
