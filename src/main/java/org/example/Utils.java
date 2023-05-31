@@ -17,25 +17,6 @@ public class Utils {
                 throw new RuntimeException(e);
             }
     }
-//    private static final String PATH_TO_DATA_FILE = "src/main/java/org/example/Assets/Teams.csv";
-//
-//    public static List<String> readFile() {
-//        try {
-//            BufferedReader bufferedReader = new BufferedReader(new FileReader(PATH_TO_DATA_FILE));
-//            List<String> teamData = new ArrayList<>();
-//            String line;
-//            while ((line = bufferedReader.readLine()) != null) {
-//                teamData.add(line);
-//            }
-//            teamData.remove(0);
-//            bufferedReader.close();
-//            return teamData;
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-
-
     public static int getNewPlayerId(){
         return playerID++;
     }

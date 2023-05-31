@@ -3,21 +3,16 @@ package org.example;
 import java.util.List;
 
 public class Team {
-    private  int id;
-    private  String name;
-    private  List<Player> playerList;
-//    private int points;
-    //private List<Goal> goalList;
+    private int id;
+    private String name;
+    private List<Player> playerList;
+
 
     public Team(String line) {
         String[] temp =line.split(",");
         this.id = Integer.parseInt(temp[0]);
         this.name = temp[1];
         this.playerList=LeagueManager.createPlayerList();
-        /*this.playerList
-                .stream()
-                .forEach(player -> player.setPlayerTeam(this));
-        */
     }
 
     public boolean sameID(int id){
@@ -34,13 +29,10 @@ public class Team {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Team{");
-        sb.append("id=").append(id);
-        sb.append(", name='").append(name).append('\'');
-        sb.append(", playerList=").append(playerList);
-        sb.append('}');
-        return sb.toString();
+        return "Team name : " +getName() +" Team ID: " +getId() +" \n";
     }
+
+
 
     public List<Player> getPlayerList() {
         return playerList;
