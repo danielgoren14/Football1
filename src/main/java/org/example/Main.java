@@ -16,9 +16,8 @@ public class Main {
         leagueManager.generateMatchDay();
         leagueManager.generateMatchDay();
 
-        System.out.println(leagueManager.findPlayersWithAtLeastNGoals(4));
-
-
+        System.out.println(leagueManager.generatePossibleMatches());
+        System.out.println(leagueManager.getTopScorers(10));
+        System.out.println(leagueManager.findPlayersWithAtLeastNGoals(3));
     }
-
 }

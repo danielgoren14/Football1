@@ -19,17 +19,16 @@ public class LeagueManager {
         teamList = data
                 .stream()
                 .map(Team::new)
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
-    /*public List<Match> findMatchesByTeam(int teamId) {
+    public List<Match> findMatchesByTeam(int teamId) {
         return this.matches
                 .stream()
                 .filter(match -> match.didTeamPlayGame(teamId))
-                .collect(Collectors.toList());
-
+                .collect(toList());
         // working
-    }*/
+    }
 
     public List<Team> findTopScoringTeams(int n) {
         Map<Team, Long> temp = this.matches
@@ -56,19 +55,26 @@ public class LeagueManager {
                 .map(Match::getGoals)
                 .flatMap(List::stream)
                 .map(Goal::getScorer)
-                .collect(Collectors.groupingBy(player -> player, counting()));
+                .collect(groupingBy(player -> player, counting()));
 
         return temp
                 .keySet()
                 .stream()
                 .filter(key -> temp.get(key) >= n)
-                .collect(Collectors.toList());
+                .collect(toList());
+        //working
     }
 
-//        private Team getTeamByPosition(int position) {
-//        String pointPosition = matches.stream().map()
-//                .filter(s1 -> s1.equals(position)).toString();
-//        return teamList.stream().filter(team -> team.equals(pointPosition)).findAny().get();
+        private Team getTeamByPosition(int position) {
+        String pointPosition = matches
+                .stream()
+                .map(match -> match.getGoals())
+                .filter(s1 -> s1.equals(position))
+                .toString();
+        return teamList.stream()
+                .filter(team -> team.equals(pointPosition))
+                .findAny()
+                .get();
 //        List<Player> scorerList = this.matches.stream()
 //                .map(match -> match.getGoals())
 //                .flatMap(List::stream)
@@ -78,25 +84,17 @@ public class LeagueManager {
 //        return goalsAmountForEachTeam
 //                .keySet().stream()
 //                .sorted()
-//
 //                .toList().get(position);
-//    }
-//    public Team getTeamByPosition (int position) {
-//        Map<Team,Long> eachTeamPoints = this.teamList.stream()
-//                .collect(Collectors.groupingBy(Team::getPoints,Function.identity()));
-//
-//
-//    }
-
-    /*public Map<Team, Long> goalsAmountForEachTeam() {
-        Map<Team,Long> temp = this.matches
+}
+    public Map<Team, Long> goalsAmountForEachTeam() {
+        return this.matches
                 .stream()
                 .map(Match::getGoals)
                 .flatMap(List::stream)
                 .map(Goal::getScorer)
                 .map(this::findPlayerTeam)
-                .collect(Collectors.groupingBy(Function.identity(), counting()));
-    }*/
+                .collect(groupingBy(Function.identity(), counting()));
+    }
 
 //    private Map<Integer, Integer> getTopScorers(int n){
 //    }
@@ -126,7 +124,7 @@ public class LeagueManager {
     public void addPointsForTeams (Match currentMatch) {
         Team homeTeam = currentMatch.getHomeTeam();
         Team awayTeam = currentMatch.getAwayTeam();
-            Long goalsForHomeTeam = currentMatch.getGoals().stream()
+        Long goalsForHomeTeam = currentMatch.getGoals().stream()
                 .map(Goal::getScorer)
                 .filter(player -> findPlayerTeam(player) == homeTeam)
                 .count();
@@ -200,7 +198,7 @@ public class LeagueManager {
         possibleMatches = possibleMatches
                 .stream()
                 .filter(Predicate.not(output::contains))
-                .collect(Collectors.toList());
+                .collect(toList());
         matches.addAll(output);
         return output;
     }
@@ -213,7 +211,7 @@ public class LeagueManager {
         return Stream
                 .generate(() -> new Goal(Utils.getNewGoalId(), random.nextInt(11), playerList.get(random.nextInt(playerList.size()))
                 )).limit(random.nextInt(5))
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
 }

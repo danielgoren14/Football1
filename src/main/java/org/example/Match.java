@@ -40,13 +40,6 @@ public class Match {
         return this.awayTeam.sameID(id) || this.homeTeam.sameID(id);
     }
 
-    @Override
-    public String toString() {
-        return "Match{" + "id=" + id +
-                ", homeTeam=" + homeTeam.getName() +
-                ", awayTeam=" + awayTeam.getName() +
-                "}\n";
-    }
 
     public void setId(int id) {
         this.id = id;
