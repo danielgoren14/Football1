@@ -96,9 +96,22 @@ public class LeagueManager {
                 .collect(groupingBy(Function.identity(), counting()));
     }
 
-//    private Map<Integer, Integer> getTopScorers(int n){
-//    }
-
+    public Map<Integer, Integer> getTopScorers(int n){
+        Map<Integer, Integer> temp = this.matches
+                .stream()
+                .map(Match::getGoals)
+                .flatMap(List::stream)
+                .map(Goal::getScorer)
+                .collect(groupingBy(Player::getId, summingInt(player -> 1)));
+        return temp
+                .entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .limit(n)
+                .sorted(Map.Entry.comparingByValue())
+                .collect(HashMap::new, (m, entry) -> m.put(entry.getKey(), entry.getValue()), HashMap::putAll);
+        //working
+    }
 
     public Player getPlayerById(int id) {
         return teamList
