@@ -31,23 +31,23 @@ public class LeagueManager {
         // working
     }*/
 
-//    public List<Team> findTopScoringTeams(int n) {
-//        Map<Team, Long> temp = this.matches
-//                .stream()
-//                .map(match -> match.getGoals())
-//                .flatMap(List::stream)
-//                .map(Goal::getScorer)
-//                .map(player -> findPlayerTeam(player))
-//                .collect(Collectors.groupingBy(Function.identity(), counting()));
-//
-//        return temp.entrySet().stream()
-//                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-//                .limit(n)
-//                .map(Map.Entry::getKey)
-//                .toList();
-//
-//        //working ( if team did not score it will now count )
-//    }
+    public List<Team> findTopScoringTeams(int n) {
+        Map<Team, Long> temp = this.matches
+                .stream()
+                .map(match -> match.getGoals())
+                .flatMap(List::stream)
+                .map(Goal::getScorer)
+                .map(player -> findPlayerTeam(player))
+                .collect(groupingBy(Function.identity(), counting()));
+
+        return temp.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .limit(n)
+                .map(Map.Entry::getKey)
+                .toList();
+
+        //working ( if team did not score it will now count )
+    }
 
 
     public List<Player> findPlayersWithAtLeastNGoals(int n) {
@@ -65,23 +65,28 @@ public class LeagueManager {
                 .collect(Collectors.toList());
     }
 
-    //    private Team getTeamByPosition(int position) {
-////        String pointPosition = this.data.stream().map(id->id.substring(0,1))
-////                .filter(s1 -> s1.equals(position)).toString();
-////        return teamList.stream().filter(team -> team.equals(pointPosition)).findAny().get();
-////        List<Player> scorerList = this.matches.stream()
-////                .map(match -> match.getGoals())
-////                .flatMap(List::stream)
-////                .map(Goal::getScorer)
-////                .toList();
-////        Map<Team,Long> goalsAmountForEachTeam = goalsAmountForEachTeam();
-////        return goalsAmountForEachTeam
-////                .keySet().stream()
-////                .sorted()
-////
-////                .toList().get(position);
+//        private Team getTeamByPosition(int position) {
+//        String pointPosition = matches.stream().map()
+//                .filter(s1 -> s1.equals(position)).toString();
+//        return teamList.stream().filter(team -> team.equals(pointPosition)).findAny().get();
+//        List<Player> scorerList = this.matches.stream()
+//                .map(match -> match.getGoals())
+//                .flatMap(List::stream)
+//                .map(Goal::getScorer)
+//                .toList();
+//        Map<Team,Long> goalsAmountForEachTeam = goalsAmountForEachTeam();
+//        return goalsAmountForEachTeam
+//                .keySet().stream()
+//                .sorted()
+//
+//                .toList().get(position);
 //    }
-
+//    public Team getTeamByPosition (int position) {
+//        Map<Team,Long> eachTeamPoints = this.teamList.stream()
+//                .collect(Collectors.groupingBy(Team::getPoints,Function.identity()));
+//
+//
+//    }
 
     /*public Map<Team, Long> goalsAmountForEachTeam() {
         Map<Team,Long> temp = this.matches
@@ -114,20 +119,37 @@ public class LeagueManager {
     }
 
     public static List<Player> createPlayerList() {
-         List<Player>  temp = new ArrayList<>();
-        temp=Stream.generate(Player::new).limit(15).collect(Collectors.toList());
+        List<Player>  temp = new ArrayList<>();
+        temp = Stream.generate(Player::new).limit(15).collect(toList());
         return temp;
     }
-
+    public void addPointsForTeams (Match currentMatch) {
+        Team homeTeam = currentMatch.getHomeTeam();
+        Team awayTeam = currentMatch.getAwayTeam();
+            Long goalsForHomeTeam = currentMatch.getGoals().stream()
+                .map(Goal::getScorer)
+                .filter(player -> findPlayerTeam(player) == homeTeam)
+                .count();
+        Long goalsForAwayTeam = currentMatch.getGoals().stream()
+                .map(Goal::getScorer)
+                .filter(player -> findPlayerTeam(player) == awayTeam)
+                .count();
+        if (goalsForHomeTeam > goalsForAwayTeam) {
+            homeTeam.addPoints(3);
+        } else if (goalsForHomeTeam == goalsForAwayTeam) {
+            homeTeam.addPoints(1);
+            awayTeam.addPoints(1);
+        } else {
+            awayTeam.addPoints(3);
+        }
+    }
     public List<Match> generatePossibleMatches() {
-
         possibleMatches = teamList.stream()
                 .flatMap(team1 -> teamList
                         .stream()
                         .filter(team2 -> team1 != team2 && team2.getId() > team1.getId())
                         .map(team2 -> new Match(Utils.getNewMatchId(), team1, team2, generateGoalList(team1, team2))))
                 .toList();
-
         return possibleMatches;
     }
 
@@ -149,7 +171,6 @@ public class LeagueManager {
         while (output.size() != 5) {
             output.clear();
             List<Team> playedTeams = new ArrayList<>();
-
             output = possibleMatches
                     .stream()
                     .skip(size)
@@ -169,9 +190,7 @@ public class LeagueManager {
                         }
                     })
                     .limit(5)
-                    .collect(Collectors.toList());
-
-
+                    .collect(toList());
             if (output.size() != 5) {
                 List<Match> newLIst = new ArrayList<>(possibleMatches);
                 Collections.reverse(newLIst);
@@ -186,13 +205,13 @@ public class LeagueManager {
         return output;
     }
 
-    public List<Goal> generateGoalList(Team team1, Team team2) {
+    public List<Goal> generateGoalList (Team team1, Team team2) {
         List<Player> playerList = new ArrayList<>(team1.getPlayerList());
         playerList.addAll(team2.getPlayerList());
 
         Random random = new Random();
         return Stream
-                .generate(() -> new Goal(Utils.getNewGoalId(), random.nextInt(90), playerList.get(random.nextInt(playerList.size()))
+                .generate(() -> new Goal(Utils.getNewGoalId(), random.nextInt(11), playerList.get(random.nextInt(playerList.size()))
                 )).limit(random.nextInt(5))
                 .collect(Collectors.toList());
     }
